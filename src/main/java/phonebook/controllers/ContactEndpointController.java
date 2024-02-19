@@ -1,9 +1,9 @@
-package phonebook.cotrollers;
+package phonebook.controllers;
 
 import phonebook.model.Contact;
-import org.springframework.web.bind.annotation.*;
 import phonebook.utils.EntryDataValidator;
 
+import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,9 +11,9 @@ import java.util.List;
 @RequestMapping("/contacts")
 public class ContactEndpointController {
 
+    //Initialize of instances
     private List<Contact> phonebook = new ArrayList<>();
-    private final EntryDataValidator validationUtils = new EntryDataValidator();
-    Contact contact;
+    private final EntryDataValidator validator = new EntryDataValidator();
 
     /**
      * Writes out all the contacts in phonebook
@@ -47,14 +47,13 @@ public class ContactEndpointController {
     @PostMapping
     public String createContact(@RequestBody Contact contact) {
         // Check if any required parameter is null or empty
-        if (validationUtils.isAnyParameterNullOrEmpty(contact.getContactName(),
-                contact.getContactSurname(),
-                contact.getContactPhoneNumber())) {
+        if (validator.isAnyParameterNullOrEmpty(contact.getContactName(),
+                                                contact.getContactSurname(),
+                                                contact.getContactPhoneNumber())) {
             return "All parameters are required for creating a contact.";
         }
 
         Long maxId = 0L; // Initialize maxId with 0
-
         // Loop through each contact in the list to find the maximum ID
         for (Contact c : phonebook) {
             if (c.getContactId() > maxId) {
@@ -64,12 +63,11 @@ public class ContactEndpointController {
 
         // Increment the maximum ID by 1 to generate a new ID for the new contact
         Long newId = maxId + 1;
-
         // Set the new ID for the contact and add it to the list
         contact.setContactId(newId);
         phonebook.add(contact);
 
-        // Return the message
+        // Return a message indicating that the contact was successfully created
         return "Contact was successfully added.";
     }
 
@@ -81,10 +79,10 @@ public class ContactEndpointController {
      */
     @PutMapping("/{contactId}")
     public String updateContactDetails(@PathVariable Long contactId, @RequestBody Contact updatedContact) {
-
-        if (validationUtils.isAnyParameterNullOrEmpty(updatedContact.getContactName(),
-                updatedContact.getContactSurname(),
-                updatedContact.getContactPhoneNumber())) {
+        // Check if any required parameter is null or empty
+        if (validator.isAnyParameterNullOrEmpty(updatedContact.getContactName(),
+                                                updatedContact.getContactSurname(),
+                                                updatedContact.getContactPhoneNumber())) {
             return "All parameters are required for updating a contact.";
         }
 
