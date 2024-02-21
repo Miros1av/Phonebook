@@ -2,7 +2,7 @@ package phonebook.model;
 
 public class Contact {
     /**
-     * ID of contact
+     * ID of contact. This parameter is automatically generated when Contact is created.
      */
     private Long contactId;
 

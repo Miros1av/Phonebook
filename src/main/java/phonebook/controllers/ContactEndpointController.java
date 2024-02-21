@@ -1,8 +1,10 @@
 package phonebook.controllers;
 
+
 import phonebook.model.Contact;
 import phonebook.utils.EntryDataValidator;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +32,14 @@ public class ContactEndpointController {
      * @return one particular contact
      */
     @GetMapping("/{contactId}")
-    public Contact getContactById(@PathVariable Long contactId) {
+    public ResponseEntity<?> getContactById(@PathVariable Long contactId) {
         for (Contact contact : phonebook) {
             if (contact.getContactId().equals(contactId)) {
-                return contact;
+                return ResponseEntity.ok(contact);
             }
         }
-        return null; // Return null if contact with given ID is not found
+        // If contact is not found, return a message
+        return ResponseEntity.ok("Contact with ID: " + contactId + " not found." );
     }
 
     /**
@@ -61,14 +64,14 @@ public class ContactEndpointController {
             }
         }
 
-        // Increment the maximum ID by 1 to generate a new ID for the new contact
+        // Increase maximum ID by 1 to generate a new ID for the new contact
         Long newId = maxId + 1;
         // Set the new ID for the contact and add it to the list
         contact.setContactId(newId);
         phonebook.add(contact);
 
-        // Return a message indicating that the contact was successfully created
-        return "Contact was successfully added.";
+        // Return a message indicating that the contact was successfully created with information about assigned ID.
+        return "Contact was successfully added. Contact ID: " + newId;
     }
 
     /**

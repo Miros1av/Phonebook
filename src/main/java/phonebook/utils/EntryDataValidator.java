@@ -9,7 +9,7 @@ public class EntryDataValidator {
     }
 
     /**
-     *This function is checking if any of parameters is null or empty
+     *This function is checking if any of String parameters is null or empty
      * @param params - String parameters
      * @return true / false
      */
